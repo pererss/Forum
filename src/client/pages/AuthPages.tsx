@@ -124,7 +124,11 @@ export function AuthPage() {
 
   return (
     <PageTransition>
-      <div className="mx-auto grid w-full max-w-4xl overflow-hidden rounded-xl border border-border bg-card shadow-pop lg:grid-cols-2">
+      <div className="relative mx-auto grid w-full max-w-4xl overflow-hidden rounded-2xl border border-border bg-card shadow-pop lg:grid-cols-2">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 -top-24 z-0 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
+        />
         <div className="relative hidden min-h-[540px] overflow-hidden bg-[#0a0a0c] p-8 text-white lg:block">
           <div aria-hidden className="surface-grid absolute inset-0 opacity-[0.14]" />
           <SignatureField className="opacity-80" />

@@ -256,16 +256,18 @@ function buildFilters(query: FeedQuery, viewerId: string | null): WhereClause {
   }
 
   // Скрытые материалы/авторы/категории не показываются в ленте.
-  if (viewerId) {
+  // Свои публикации остаются видимыми всегда — иначе автор может спрятать сам себя.
+  // В «Моём» (черновики, избранное) правило скрытия не применяется вовсе.
+  if (viewerId && !query.mine && !query.favorite) {
     params.push(viewerId);
     const idx = params.length;
-    conditions.push(`NOT EXISTS (
+    conditions.push(`(p.author_id = $${idx} OR NOT EXISTS (
       SELECT 1 FROM feed_hides h
       WHERE h.user_id = $${idx}
         AND ((h.target_type = 'post' AND h.target_id = p.id)
           OR (h.target_type = 'author' AND h.target_id = p.author_id)
           OR (h.target_type = 'category' AND h.target_id = p.category_id))
-    )`);
+    ))`);
   }
 
   // Режим «Подписки»: авторы, на которых подписан, и подписки на теги.

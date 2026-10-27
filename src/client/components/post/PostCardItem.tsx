@@ -3,6 +3,7 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useQueryClient } from '@tanstack/react-query';
 import {
+  ArrowUpRight,
   Bookmark,
   CheckCircle2,
   EyeOff,
@@ -84,43 +85,40 @@ export function PostCardItem({
     void queryClient.invalidateQueries({ queryKey: ['feed'] });
   };
 
+  const meta = POST_TYPE_META[post.type];
+
   return (
     <article
       className={cn(
-        'group relative rounded-lg border border-border bg-card shadow-card transition-all duration-200',
-        'hover:border-foreground/15 hover:shadow-pop',
-        variant === 'grid' && 'flex h-full flex-col p-4',
-        variant === 'list' && 'p-4 sm:p-5',
+        'nuffy-card group overflow-hidden rounded-xl',
+        variant === 'grid' && 'flex h-full min-h-[292px] flex-col p-4',
+        variant === 'list' && 'flex flex-col p-4 sm:p-5',
       )}
     >
-      <div className="mb-2.5 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Link
           to={`/u/${post.author.username}`}
-          className="shrink-0 rounded-full transition-opacity hover:opacity-85"
+          className="shrink-0 rounded-full ring-offset-2 ring-offset-card transition-all hover:ring-2 hover:ring-border"
           aria-label={`Профиль ${post.author.displayName}`}
         >
-          <Avatar name={post.author.displayName} username={post.author.username} size={28} />
+          <Avatar name={post.author.displayName} username={post.author.username} size={variant === 'grid' ? 24 : 28} />
         </Link>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5 text-xs">
-            <Link
-              to={`/u/${post.author.username}`}
-              className="truncate font-semibold text-foreground hover:underline"
-            >
-              {post.author.displayName}
-            </Link>
-            <span className="truncate text-muted-foreground">@{post.author.username}</span>
-            <span className="text-muted-foreground/50">·</span>
-            <time
-              dateTime={post.publishedAt ?? post.createdAt}
-              className="shrink-0 text-muted-foreground"
-            >
-              {timeAgo(post.publishedAt ?? post.createdAt)}
-            </time>
-          </div>
+        <div className="flex min-w-0 flex-1 items-center gap-1.5 text-[11.5px]">
+          <Link
+            to={`/u/${post.author.username}`}
+            className="truncate font-semibold text-foreground hover:text-accent"
+          >
+            {post.author.displayName}
+          </Link>
+          <span className="text-muted-foreground/40">·</span>
+          <time
+            dateTime={post.publishedAt ?? post.createdAt}
+            className="shrink-0 text-muted-foreground"
+          >
+            {timeAgo(post.publishedAt ?? post.createdAt)}
+          </time>
         </div>
-        <div className="flex shrink-0 items-center gap-1">
-          <TypeBadge type={post.type} />
+        <div className="flex shrink-0 items-center gap-0.5">
           {post.isPinned ? (
             <span title="Закреплено" className="text-muted-foreground">
               <Pin className="h-3.5 w-3.5" />
@@ -131,12 +129,12 @@ export function PostCardItem({
               <Lock className="h-3.5 w-3.5" />
             </span>
           ) : null}
-          {viewer ? (
+          {viewer && viewer.id !== post.author.id ? (
             <DropdownMenu.Root>
               <DropdownMenu.Trigger asChild>
                 <button
                   type="button"
-                  className="grid h-7 w-7 place-items-center rounded text-muted-foreground/60 opacity-0 transition-opacity hover:bg-surface-hover hover:text-foreground focus:opacity-100 group-hover:opacity-100"
+                  className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground/60 opacity-0 transition-all hover:bg-surface-hover hover:text-foreground focus:opacity-100 group-hover:opacity-100"
                   aria-label="Действия с публикацией"
                 >
                   <MoreHorizontal className="h-4 w-4" />
@@ -146,24 +144,24 @@ export function PostCardItem({
                 <DropdownMenu.Content
                   align="end"
                   sideOffset={4}
-                  className="z-50 min-w-52 rounded-lg border border-border bg-popover p-1 shadow-pop"
+                  className="nuffy-select-content z-50 min-w-52 rounded-xl border border-border bg-popover/95 p-1 shadow-pop backdrop-blur-xl"
                 >
                   <DropdownMenu.Item
                     onSelect={() => void hide('post')}
-                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm outline-none hover:bg-surface-hover focus:bg-surface-hover"
+                    className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] outline-none hover:bg-surface-hover focus:bg-surface-hover"
                   >
                     <EyeOff className="h-4 w-4 text-muted-foreground" /> Скрыть публикацию
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
                     onSelect={() => void hide('author')}
-                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm outline-none hover:bg-surface-hover focus:bg-surface-hover"
+                    className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] outline-none hover:bg-surface-hover focus:bg-surface-hover"
                   >
                     <UserX className="h-4 w-4 text-muted-foreground" /> Скрыть автора
                   </DropdownMenu.Item>
                   {post.category ? (
                     <DropdownMenu.Item
                       onSelect={() => void hide('category')}
-                      className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm outline-none hover:bg-surface-hover focus:bg-surface-hover"
+                      className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] outline-none hover:bg-surface-hover focus:bg-surface-hover"
                     >
                       <EyeOff className="h-4 w-4 text-muted-foreground" /> Скрыть «{post.category.name}»
                     </DropdownMenu.Item>
@@ -175,24 +173,35 @@ export function PostCardItem({
         </div>
       </div>
 
-      <h3 className="font-display text-[17px] font-semibold leading-snug tracking-[-0.01em] sm:text-lg">
-        <Link
-          to={`/post/${post.id}`}
-          className="line-clamp-2 transition-colors hover:text-accent"
-        >
+      <div className="mt-3 flex items-center gap-1.5">
+        <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent/70" />
+        <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground/80">
+          {meta.name}
+        </span>
+        {post.status !== 'published' ? (
+          <span className="ml-auto rounded bg-warning/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warning">
+            {post.status === 'draft' ? 'Черновик' : post.status === 'hidden' ? 'Скрыто' : 'Удалено'}
+          </span>
+        ) : null}
+      </div>
+
+      <h3
+        className={cn(
+          'mt-1.5 font-display font-semibold leading-snug tracking-[-0.015em]',
+          variant === 'grid' ? 'line-clamp-3 text-[15.5px]' : 'text-[17px] sm:text-lg',
+        )}
+      >
+        <Link to={`/post/${post.id}`} className="transition-colors hover:text-accent">
           {post.title}
         </Link>
       </h3>
 
-      {post.status !== 'published' ? (
-        <div className="mt-1.5">
-          <span className="rounded bg-warning/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warning">
-            {post.status === 'draft' ? 'Черновик' : post.status === 'hidden' ? 'Скрыто' : 'Удалено'}
-          </span>
-        </div>
-      ) : null}
-
-      <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
+      <p
+        className={cn(
+          'mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground',
+          variant === 'grid' ? 'line-clamp-3' : 'line-clamp-2',
+        )}
+      >
         {post.excerpt}
       </p>
 
@@ -202,39 +211,42 @@ export function PostCardItem({
         </div>
       ) : null}
 
-      <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+      <div className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-1">
         {post.category ? (
           <Link
             to={`/explore?category=${post.category.slug}`}
-            className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-secondary-foreground transition-colors hover:bg-surface-hover"
+            className="rounded-full bg-secondary px-2 py-0.5 text-[10.5px] font-medium text-secondary-foreground transition-colors hover:bg-surface-hover"
           >
             {post.category.name}
           </Link>
         ) : null}
-        {post.tags.slice(0, 4).map((tag) => (
+        {post.tags.slice(0, 3).map((tag) => (
           <Link
             key={tag.id}
             to={`/explore?tag=${encodeURIComponent(tag.slug)}`}
-            className="text-[11px] font-medium text-muted-foreground transition-colors hover:text-accent"
+            className="text-[10.5px] font-medium text-muted-foreground/80 transition-colors hover:text-accent"
           >
             #{tag.name}
           </Link>
         ))}
       </div>
 
-      <div className="mt-3 flex items-center gap-1 border-t border-border/60 pt-2.5 text-muted-foreground">
+      <div className="mt-auto" />
+
+      <div className="flex items-center gap-0.5 border-t border-border/60 pt-2 text-muted-foreground">
         <Link
           to={`/post/${post.id}`}
-          className="flex items-center gap-1.5 rounded px-1.5 py-1 text-xs transition-colors hover:bg-surface-hover hover:text-foreground"
+          className="flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[11.5px] transition-colors hover:bg-surface-hover hover:text-foreground"
           aria-label={`Комментарии: ${post.counts.comments}`}
         >
           <MessageSquare className="h-3.5 w-3.5" />
           <span className="tabular-nums">{formatNumber(post.counts.comments)}</span>
         </Link>
-        <span className="flex items-center gap-1.5 px-1.5 py-1 text-xs" title="Реакции">
+        <span className="flex items-center gap-1.5 px-1.5 py-1 text-[11.5px]" title="Реакции">
           <Heart className="h-3.5 w-3.5" />
           <span className="tabular-nums">{formatNumber(post.counts.reactions)}</span>
         </span>
+
         <span className="ml-auto flex items-center gap-0.5">
           <button
             type="button"
@@ -242,15 +254,22 @@ export function PostCardItem({
             aria-pressed={favorited}
             aria-label={favorited ? 'Убрать из избранного' : 'В избранное'}
             className={cn(
-              'flex items-center gap-1 rounded px-1.5 py-1 text-xs transition-all',
+              'flex items-center gap-1 rounded-md px-1.5 py-1 text-[11.5px] transition-all active:scale-90',
               favorited
                 ? 'text-accent'
                 : 'text-muted-foreground hover:bg-surface-hover hover:text-foreground',
             )}
           >
-            <Bookmark className={cn('h-3.5 w-3.5', favorited && 'fill-current')} />
+            <Bookmark className={cn('h-3.5 w-3.5 transition-transform', favorited && 'scale-110 fill-current')} />
             <span className="tabular-nums">{formatNumber(favoriteCount)}</span>
           </button>
+          <Link
+            to={`/post/${post.id}`}
+            aria-label="Открыть публикацию"
+            className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground/50 transition-all hover:bg-surface-hover hover:text-foreground"
+          >
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </Link>
         </span>
       </div>
     </article>

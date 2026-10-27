@@ -133,15 +133,18 @@ export function NotificationsPage() {
   return (
     <PageTransition>
       <div className="mx-auto w-full max-w-3xl space-y-3">
-        <header className="flex flex-wrap items-center justify-between gap-2">
+        <header className="flex flex-wrap items-end justify-between gap-2 pt-1">
           <div>
-            <h1 className="font-display text-2xl font-semibold tracking-[-0.02em]">Уведомления</h1>
-            <p className="mt-0.5 text-[13px] text-muted-foreground">
-              {unread > 0 ? `${unread} непрочитанных` : 'Всё прочитано'} · обновление раз в минуту
+            <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-accent">Активность</p>
+            <h1 className="mt-1 font-display text-[26px] font-semibold leading-none tracking-[-0.03em]">
+              Уведомления
+            </h1>
+            <p className="mt-1.5 text-[12px] text-muted-foreground">
+              {unread > 0 ? `${unread} непрочитанных` : 'Всё прочитано'}
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button asChild size="sm" variant="outline">
+            <Button asChild size="sm" variant="ghost">
               <Link to="/settings">
                 <Settings className="h-3.5 w-3.5" /> Настройки
               </Link>
@@ -152,7 +155,7 @@ export function NotificationsPage() {
           </div>
         </header>
 
-        <div className="flex items-center gap-1 rounded-md border border-border bg-surface p-0.5 text-xs">
+        <div className="flex items-center gap-1 rounded-xl border border-border bg-surface/60 p-1 text-xs">
           <button
             type="button"
             onClick={() => {
@@ -161,8 +164,8 @@ export function NotificationsPage() {
             }}
             aria-pressed={!unreadOnly}
             className={cn(
-              'flex-1 rounded px-2 py-1.5 font-medium transition-colors',
-              !unreadOnly ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground',
+              'flex-1 rounded-lg px-2 py-1.5 font-medium transition-all',
+              !unreadOnly ? 'bg-card text-foreground shadow-sm ring-1 ring-border/70' : 'text-muted-foreground',
             )}
           >
             Все
@@ -175,8 +178,8 @@ export function NotificationsPage() {
             }}
             aria-pressed={unreadOnly}
             className={cn(
-              'flex-1 rounded px-2 py-1.5 font-medium transition-colors',
-              unreadOnly ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground',
+              'flex-1 rounded-lg px-2 py-1.5 font-medium transition-all',
+              unreadOnly ? 'bg-card text-foreground shadow-sm ring-1 ring-border/70' : 'text-muted-foreground',
             )}
           >
             Непрочитанные

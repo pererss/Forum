@@ -1,9 +1,9 @@
 // Лента: режимы, фильтры, сохранённые фильтры, скелетоны, пагинация.
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { motion, useReducedMotion } from 'motion/react';
 import {
   Bookmark,
-  Check,
   ChevronLeft,
   ChevronRight,
   Filter,
@@ -171,20 +171,26 @@ export function FeedPage({ view = 'feed' }: { view?: FeedView }) {
 
   const headerTitle = isDrafts ? 'Черновики' : isFavorites ? 'Избранное' : 'Лента';
   const headerSubtitle = isDrafts
-    ? 'Незаконченные материалы сохраняются автоматически и доступны только вам.'
+    ? 'Сохраняются автоматически и доступны только вам.'
     : isFavorites
-      ? 'Публикации, которые вы сохранили. Доступно только вам.'
-      : 'Спокойный поток идей, вопросов и проектов сообщества.';
+      ? 'Сохранённое вами. Видно только вам.'
+      : '';
+  const reduce = useReducedMotion();
 
   return (
     <PageTransition>
       <div className="mx-auto w-full max-w-3xl space-y-4">
-        <header className="flex flex-wrap items-end justify-between gap-3">
+        <header className="flex flex-wrap items-end justify-between gap-3 pt-1">
           <div>
-            <h1 className="font-display text-2xl font-semibold tracking-[-0.02em]">{headerTitle}</h1>
-            <p className="mt-1 max-w-xl text-[13px] leading-relaxed text-muted-foreground">
-              {headerSubtitle}
+            <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-accent">
+              {isDrafts ? 'Моё' : isFavorites ? 'Моё' : 'Сообщество'}
             </p>
+            <h1 className="mt-1 font-display text-[26px] font-semibold leading-none tracking-[-0.03em]">
+              {headerTitle}
+            </h1>
+            {headerSubtitle ? (
+              <p className="mt-1.5 text-[12px] text-muted-foreground">{headerSubtitle}</p>
+            ) : null}
           </div>
           {user ? (
             <Button asChild size="sm" variant="secondary" className="hidden sm:inline-flex">
@@ -222,7 +228,7 @@ export function FeedPage({ view = 'feed' }: { view?: FeedView }) {
         ) : null}
 
         {view === 'feed' ? (
-          <div className="flex gap-1 overflow-x-auto rounded-lg border border-border bg-surface p-1">
+          <div className="flex gap-1 overflow-x-auto rounded-xl border border-border bg-surface/60 p-1">
             {MODES.map((item) => {
               const active = mode === item.value;
               return (
@@ -232,24 +238,22 @@ export function FeedPage({ view = 'feed' }: { view?: FeedView }) {
                   onClick={() => setParam('mode', item.value)}
                   aria-pressed={active}
                   className={cn(
-                    'relative flex-1 whitespace-nowrap rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors',
-                    active
-                      ? 'bg-card text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground',
+                    'relative flex-1 whitespace-nowrap rounded-lg px-3 py-1.5 text-[12.5px] font-medium transition-colors duration-200',
+                    active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  {item.label}
+                  {active ? (
+                    <motion.span
+                      layoutId="feed-mode"
+                      className="absolute inset-0 rounded-lg bg-card shadow-sm ring-1 ring-border/70"
+                      transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  ) : null}
+                  <span className="relative z-10">{item.label}</span>
                 </button>
               );
             })}
           </div>
-        ) : null}
-
-        {mode === 'following' && view === 'feed' ? (
-          <p className="rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
-            В этой ленте — только авторы и теги, на которые вы подписаны.
-            {!user ? ' Войдите, чтобы она наполнилась.' : ''}
-          </p>
         ) : null}
 
         <div className="flex flex-wrap items-center gap-2">
@@ -525,13 +529,6 @@ export function FeedPage({ view = 'feed' }: { view?: FeedView }) {
             </nav>
           </>
         )}
-
-        {view === 'feed' && user && (feed.data?.items.length ?? 0) > 0 ? (
-          <div className="flex items-center justify-center gap-1.5 pb-2 pt-1 text-[11px] text-muted-foreground">
-            <Check className="h-3 w-3" /> Показано до 3 публикаций одного автора подряд — против
-            засорения ленты
-          </div>
-        ) : null}
       </div>
     </PageTransition>
   );

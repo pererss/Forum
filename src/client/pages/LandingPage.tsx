@@ -182,9 +182,9 @@ export function LandingPage() {
               <Reveal key={format.type} delay={Math.min(index, 9) * 0.03}>
                 <Link
                   to={`/explore/${format.type}`}
-                  className="group flex h-full flex-col gap-3 rounded-lg border border-border bg-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-pop"
+                  className="nuffy-card group flex h-full flex-col gap-3 rounded-xl p-4"
                 >
-                  <span className="grid h-9 w-9 place-items-center rounded-md bg-secondary text-foreground transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-secondary text-foreground transition-all duration-300 group-hover:bg-accent group-hover:text-accent-foreground group-hover:shadow-[0_0_18px_color-mix(in_oklab,var(--accent)_45%,transparent)]">
                     <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
                   </span>
                   <span>
@@ -328,7 +328,9 @@ export function LandingPage() {
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4 py-6 text-[11px] text-muted-foreground sm:px-6">
           <span className="font-display text-sm font-semibold text-foreground">Nuffy</span>
           <span>Обсуждения · Статьи · Вопросы · Команды · События</span>
-          <span>TiDB Cloud · PostgreSQL Compatible</span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-success" /> Работает на Nuffy
+          </span>
         </div>
       </footer>
     </div>

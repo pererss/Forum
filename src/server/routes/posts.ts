@@ -184,6 +184,17 @@ postsRouter.post(
       .object({ targetType: z.enum(['post', 'author', 'category']).default('post'), targetId: z.string().max(64) })
       .parse(req.body ?? {});
     const targetId = body.targetType === 'post' ? id : body.targetId;
+    if (body.targetType === 'author' && targetId === viewer.id) {
+      res.status(400).json({ error: { message: 'Нельзя скрыть собственный профиль.' } });
+      return;
+    }
+    if (body.targetType === 'post') {
+      const author = await one<{ author_id: string }>('SELECT author_id FROM posts WHERE id = $1', [id]);
+      if (author?.author_id === viewer.id) {
+        res.status(400).json({ error: { message: 'Свою публикацию скрывать не нужно.' } });
+        return;
+      }
+    }
     await withTransaction((db) => hideFromFeed(viewer.id, body.targetType, targetId, db));
     res.json({ ok: true });
   },

@@ -42,9 +42,9 @@ function Section({
   id?: string;
 }) {
   return (
-    <section id={id} className="scroll-mt-20 rounded-xl border border-border bg-card p-4 shadow-card sm:p-5">
+    <section id={id} className="scroll-mt-20 rounded-xl border border-border bg-card/80 p-4 sm:p-5">
       <div className="mb-3 flex items-start gap-2.5">
-        <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-md bg-secondary text-muted-foreground">
+        <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-accent/10 text-accent">
           {icon}
         </span>
         <div>
@@ -200,11 +200,11 @@ export function SettingsPage() {
   return (
     <PageTransition>
       <div className="mx-auto w-full max-w-3xl space-y-3">
-        <header>
-          <h1 className="font-display text-2xl font-semibold tracking-[-0.02em]">Настройки</h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">
-            Профиль, приватность и уведомления. Все изменения сохраняются на сервере.
-          </p>
+        <header className="pt-1">
+          <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-accent">Аккаунт</p>
+          <h1 className="mt-1 font-display text-[26px] font-semibold leading-none tracking-[-0.03em]">
+            Настройки
+          </h1>
         </header>
 
         {saved ? (

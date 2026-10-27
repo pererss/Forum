@@ -95,18 +95,28 @@ export function ProfilePage() {
   return (
     <PageTransition>
       <div className="mx-auto w-full max-w-3xl space-y-4">
-        <section className="relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-card sm:p-6">
+        <section className="nuffy-card relative isolate overflow-hidden rounded-2xl p-5 sm:p-6">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-accent/12 to-transparent"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-accent/15 blur-3xl"
+          />
           <div aria-hidden className="surface-grid pointer-events-none absolute inset-0 opacity-[0.05]" />
           <div className="relative flex flex-wrap items-start gap-4">
-            <Avatar
-              name={profile.displayName}
-              username={profile.username}
-              size={76}
-              className="ring-4 ring-background"
-            />
+            <span className="rounded-full bg-gradient-to-br from-accent/60 via-border to-transparent p-[2px]">
+              <Avatar
+                name={profile.displayName}
+                username={profile.username}
+                size={76}
+                className="ring-4 ring-card"
+              />
+            </span>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="font-display text-2xl font-semibold tracking-[-0.02em]">
+                <h1 className="font-display text-[26px] font-semibold leading-none tracking-[-0.03em]">
                   {profile.displayName}
                 </h1>
                 {profile.role !== 'user' ? (
@@ -116,11 +126,18 @@ export function ProfilePage() {
                 ) : null}
                 {isSelf ? <Badge tone="neutral">это вы</Badge> : null}
               </div>
-              <p className="text-sm text-muted-foreground">@{profile.username}</p>
+              <p className="mt-1 text-sm text-muted-foreground">@{profile.username}</p>
               {profile.bio ? (
                 <p className="mt-2 max-w-xl whitespace-pre-wrap text-sm leading-relaxed text-foreground/85">
                   {profile.bio}
                 </p>
+              ) : isSelf ? (
+                <Link
+                  to="/settings"
+                  className="mt-2 inline-block text-[13px] text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
+                >
+                  Добавить описание профиля
+                </Link>
               ) : (
                 <p className="mt-2 text-sm italic text-muted-foreground">Без описания.</p>
               )}
@@ -163,7 +180,7 @@ export function ProfilePage() {
             </div>
           </div>
 
-          <div className="relative mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="relative mt-5 flex flex-wrap items-stretch divide-x divide-border/70 rounded-xl border border-border/70 bg-surface/50">
             {[
               { label: 'публикаций', value: counts.posts },
               { label: 'комментариев', value: counts.comments },
@@ -172,13 +189,13 @@ export function ProfilePage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-md border border-border bg-surface px-3 py-2 text-center"
+                className="min-w-[25%] flex-1 px-3 py-2.5 text-center"
                 title={stat.value === null ? 'Скрыто настройками приватности' : undefined}
               >
                 <p className="font-display text-lg font-semibold tabular-nums">
                   {stat.value === null ? '—' : <AnimatedNumber value={stat.value} />}
                 </p>
-                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                <p className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground">
                   {stat.value === null ? 'скрыто' : stat.label}
                 </p>
               </div>
@@ -186,16 +203,16 @@ export function ProfilePage() {
           </div>
         </section>
 
-        <section className="rounded-lg border border-border bg-card p-4 shadow-card">
+        <section className="rounded-xl border border-border bg-card/70 p-4">
           <div className="flex items-center justify-between gap-2">
             <h2 className="font-display text-sm font-semibold">Уровень {profile.level}</h2>
             <span className="text-[11px] text-muted-foreground">
               {profile.progress.xpIntoLevel} / {profile.progress.xpForNext} XP до следующего
             </span>
           </div>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-secondary">
+          <div className="relative mt-2 h-2 overflow-hidden rounded-full bg-secondary">
             <div
-              className="h-full rounded-full bg-accent transition-[width] duration-700"
+              className="h-full rounded-full bg-gradient-to-r from-accent/70 via-accent to-accent shadow-[0_0_12px_color-mix(in_oklab,var(--accent)_50%,transparent)] transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{ width: `${Math.min(100, profile.progress.percent)}%` }}
             />
           </div>

@@ -1715,17 +1715,17 @@ export function AdminPage() {
   return (
     <PageTransition>
       <div className="mx-auto w-full max-w-[1200px]">
-        <header className="mb-4 flex flex-wrap items-end justify-between gap-2">
+        <header className="mb-4 flex flex-wrap items-end justify-between gap-2 pt-1">
           <div>
-            <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-accent">
-              <Shield className="h-3.5 w-3.5" /> администрирование
+            <p className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.16em] text-accent">
+              <Shield className="h-3.5 w-3.5" /> Администрирование
             </p>
-            <h1 className="mt-1 font-display text-2xl font-semibold tracking-[-0.02em]">Админ-панель</h1>
-            <p className="mt-0.5 text-[13px] text-muted-foreground">
-              {active.label} · действия пишутся в журнал, статистика — только из базы.
-            </p>
+            <h1 className="mt-1 font-display text-[26px] font-semibold leading-none tracking-[-0.03em]">
+              Админ-панель
+            </h1>
+            <p className="mt-1.5 text-[12px] text-muted-foreground">{active.label}</p>
           </div>
-          <Button asChild size="sm" variant="outline">
+          <Button asChild size="sm" variant="ghost">
             <Link to="/feed">В ленту</Link>
           </Button>
         </header>
@@ -1733,7 +1733,7 @@ export function AdminPage() {
         <div className="grid gap-4 lg:grid-cols-[210px_minmax(0,1fr)]">
           <nav
             aria-label="Разделы админ-панели"
-            className="flex gap-1 overflow-x-auto rounded-lg border border-border bg-surface p-1 lg:flex-col lg:overflow-visible"
+            className="flex gap-1 overflow-x-auto rounded-xl border border-border bg-surface/60 p-1.5 lg:flex-col lg:overflow-visible"
           >
             {SECTIONS.map((item) => {
               const Icon = item.icon;
@@ -1745,13 +1745,16 @@ export function AdminPage() {
                   onClick={() => setSearchParams({ section: item.key })}
                   aria-current={isActive ? 'page' : undefined}
                   className={cn(
-                    'flex shrink-0 items-center gap-2 rounded-md px-2.5 py-2 text-left text-[13px] font-medium transition-colors lg:w-full',
+                    'relative flex shrink-0 items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition-colors lg:w-full',
                     isActive
-                      ? 'bg-card text-foreground shadow-sm'
+                      ? 'bg-card text-foreground shadow-sm ring-1 ring-border/70'
                       : 'text-muted-foreground hover:bg-surface-hover hover:text-foreground',
                   )}
                 >
-                  <Icon className="h-4 w-4 shrink-0" strokeWidth={1.8} />
+                  <Icon
+                    className={cn('h-4 w-4 shrink-0', isActive ? 'text-accent' : 'text-muted-foreground/70')}
+                    strokeWidth={1.8}
+                  />
                   <span className="whitespace-nowrap">{item.label}</span>
                 </button>
               );

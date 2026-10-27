@@ -1,4 +1,4 @@
-// Единый редактор: выбор типа, адаптивные поля, предпросмотр,
+﻿// Единый редактор: выбор типа, адаптивные поля, предпросмотр,
 // автосохранение черновика, валидация и защита от потери данных.
 
 import {
@@ -553,23 +553,26 @@ export function EditorPage() {
   return (
     <PageTransition>
       <div className="mx-auto w-full max-w-3xl pb-24">
-        <header className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <header className="mb-4 flex flex-wrap items-end justify-between gap-2 pt-1">
           <div>
-            <h1 className="font-display text-2xl font-semibold tracking-[-0.02em]">
+            <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-accent">
+              {original ? 'Редактирование' : 'Создание'}
+            </p>
+            <h1 className="mt-1 font-display text-[26px] font-semibold leading-none tracking-[-0.03em]">
               {original ? 'Редактирование' : 'Новая публикация'}
             </h1>
-            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
-              {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : dirty ? null : <Check className="h-3 w-3" />}
+            <p className="mt-1.5 flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+              {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : dirty ? null : <Check className="h-3 w-3 text-success" />}
               {saveState}
             </p>
           </div>
-          <div className="flex items-center gap-0.5 rounded-md border border-border bg-surface p-0.5">
+          <div className="flex items-center gap-1 rounded-lg border border-border bg-surface/60 p-1">
             <button
               type="button"
               onClick={() => setTab('write')}
               className={cn(
-                'rounded px-3 py-1.5 text-xs font-medium transition-colors',
-                tab === 'write' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground',
+                'rounded-md px-3 py-1.5 text-xs font-medium transition-all',
+                tab === 'write' ? 'bg-card text-foreground shadow-sm ring-1 ring-border/70' : 'text-muted-foreground',
               )}
             >
               Редактор
@@ -578,8 +581,8 @@ export function EditorPage() {
               type="button"
               onClick={() => setTab('preview')}
               className={cn(
-                'rounded px-3 py-1.5 text-xs font-medium transition-colors',
-                tab === 'preview' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground',
+                'rounded-md px-3 py-1.5 text-xs font-medium transition-all',
+                tab === 'preview' ? 'bg-card text-foreground shadow-sm ring-1 ring-border/70' : 'text-muted-foreground',
               )}
             >
               Предпросмотр
@@ -597,7 +600,7 @@ export function EditorPage() {
         ) : null}
 
         {tab === 'preview' ? (
-          <div className="rounded-lg border border-border bg-card p-5 sm:p-6">
+          <div className="rounded-xl border border-border bg-card/80 p-5 sm:p-6">
             <div className="mb-3 flex flex-wrap items-center gap-2">
               <TypeBadge type={type} />
               <span className="text-[11px] text-muted-foreground">предпросмотр</span>
@@ -697,7 +700,7 @@ export function EditorPage() {
 
             {/* ————— Адаптивные поля ————— */}
             {type === 'poll' ? (
-              <section className="rounded-lg border border-border bg-card p-3.5">
+              <section className="rounded-xl border border-border bg-card/70 p-3.5">
                 <p className="text-sm font-medium">Варианты ответа</p>
                 <div className="mt-2 space-y-2">
                   {options.map((option, index) => (
@@ -767,7 +770,7 @@ export function EditorPage() {
             ) : null}
 
             {type === 'team' ? (
-              <section className="rounded-lg border border-border bg-card p-3.5">
+              <section className="rounded-xl border border-border bg-card/70 p-3.5">
                 <p className="text-sm font-medium">Роли и места</p>
                 <div className="mt-2 space-y-2.5">
                   {roles.map((role) => (
@@ -852,7 +855,7 @@ export function EditorPage() {
             ) : null}
 
             {type === 'event' ? (
-              <section className="space-y-3 rounded-lg border border-border bg-card p-3.5">
+              <section className="space-y-3 rounded-xl border border-border bg-card/70 p-3.5">
                 <div className="grid gap-2 sm:grid-cols-2">
                   <label className="text-xs text-muted-foreground">
                     Начало *
@@ -883,7 +886,7 @@ export function EditorPage() {
             ) : null}
 
             {type === 'vacancy' ? (
-              <section className="space-y-3 rounded-lg border border-border bg-card p-3.5">
+              <section className="space-y-3 rounded-xl border border-border bg-card/70 p-3.5">
                 <div className="grid gap-2 sm:grid-cols-3">
                   <label className="text-xs text-muted-foreground">
                     Компания
@@ -919,7 +922,7 @@ export function EditorPage() {
             ) : null}
 
             {type === 'project' ? (
-              <section className="space-y-3 rounded-lg border border-border bg-card p-3.5">
+              <section className="space-y-3 rounded-xl border border-border bg-card/70 p-3.5">
                 <div className="grid gap-2 sm:grid-cols-2">
                   <label className="text-xs text-muted-foreground">
                     Статус
@@ -945,7 +948,7 @@ export function EditorPage() {
             ) : null}
 
             {type === 'goal' ? (
-              <section className="space-y-3 rounded-lg border border-border bg-card p-3.5">
+              <section className="space-y-3 rounded-xl border border-border bg-card/70 p-3.5">
                 <div className="grid gap-2 sm:grid-cols-3">
                   <label className="text-xs text-muted-foreground">
                     Цель *
@@ -996,7 +999,7 @@ export function EditorPage() {
             ) : null}
 
             {type === 'checklist' ? (
-              <section className="rounded-lg border border-border bg-card p-3.5">
+              <section className="rounded-xl border border-border bg-card/70 p-3.5">
                 <p className="text-sm font-medium">Начальные задачи</p>
                 <div className="mt-2 space-y-1.5">
                   {checklistItems.map((item) => (

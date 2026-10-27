@@ -317,8 +317,16 @@ export function PostPage() {
           </div>
         </div>
 
-        <header className="border-b border-border pb-4">
-          <div className="flex flex-wrap items-center gap-2">
+        <header className="relative isolate overflow-hidden rounded-xl border border-border bg-card/70 p-4 sm:p-5">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -right-10 -top-16 h-40 w-40 rounded-full bg-accent/10 blur-3xl"
+          />
+          <div className="relative flex flex-wrap items-center gap-2">
             <TypeBadge type={detail.type} />
             {detail.category ? (
               <Link

@@ -105,22 +105,28 @@ export function Skeleton({ className }: { className?: string }) {
   );
 }
 
-export function PostCardSkeleton() {
+export function PostCardSkeleton({ variant = 'list' }: { variant?: 'list' | 'grid' }) {
   return (
-    <Card className="p-5 space-y-3">
-      <div className="flex items-center gap-3">
-        <Skeleton className="h-9 w-9 rounded-full" />
+    <Card
+      className={cn(
+        'space-y-3 p-4 sm:p-5',
+        variant === 'grid' && 'flex h-full min-h-[292px] flex-col p-4',
+      )}
+    >
+      <div className="flex items-center gap-2.5">
+        <Skeleton className="h-7 w-7 rounded-full" />
         <div className="space-y-1.5">
-          <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-2.5 w-16" />
+          <Skeleton className="h-2.5 w-24" />
+          <Skeleton className="h-2 w-14" />
         </div>
       </div>
-      <Skeleton className="h-5 w-4/5" />
+      <Skeleton className="h-4 w-4/5" />
+      <Skeleton className="h-4 w-3/5" />
       <div className="space-y-1.5">
-        <Skeleton className="h-3 w-full" />
-        <Skeleton className="h-3 w-3/4" />
+        <Skeleton className="h-2.5 w-full" />
+        <Skeleton className="h-2.5 w-3/4" />
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 pt-2">
         <Skeleton className="h-5 w-14 rounded-full" />
         <Skeleton className="h-5 w-16 rounded-full" />
       </div>
@@ -128,11 +134,25 @@ export function PostCardSkeleton() {
   );
 }
 
-export function FeedSkeleton({ count = 5 }: { count?: number }) {
+export function FeedSkeleton({
+  count = 5,
+  layout = 'list',
+}: {
+  count?: number;
+  layout?: 'list' | 'grid';
+}) {
   return (
-    <div className="space-y-4" aria-label="Загрузка публикаций" role="status">
+    <div
+      className={cn(
+        layout === 'list'
+          ? 'space-y-3'
+          : 'grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+      )}
+      aria-label="Загрузка публикаций"
+      role="status"
+    >
       {Array.from({ length: count }, (_, index) => (
-        <PostCardSkeleton key={index} />
+        <PostCardSkeleton key={index} variant={layout === 'grid' ? 'grid' : 'list'} />
       ))}
     </div>
   );
@@ -152,13 +172,23 @@ export function EmptyState({
   icon?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border bg-card/50 px-6 py-14 text-center">
-      {icon ? <div className="mb-3 text-muted-foreground/60">{icon}</div> : null}
-      <h3 className="font-display text-base font-semibold">{title}</h3>
-      {description ? (
-        <p className="mt-1.5 max-w-md text-sm text-muted-foreground">{description}</p>
+    <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-border bg-card/50 px-6 py-16 text-center">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 h-40 w-72 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
+      />
+      {icon ? (
+        <div className="relative mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-border bg-surface text-muted-foreground/70">
+          {icon}
+        </div>
       ) : null}
-      {action ? <div className="mt-4">{action}</div> : null}
+      <h3 className="relative font-display text-base font-semibold">{title}</h3>
+      {description ? (
+        <p className="relative mt-1.5 max-w-md text-[13px] leading-relaxed text-muted-foreground">
+          {description}
+        </p>
+      ) : null}
+      {action ? <div className="relative mt-5">{action}</div> : null}
     </div>
   );
 }
