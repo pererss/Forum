@@ -21,7 +21,7 @@ import { AnimatedNumber, PageTransition, Reveal } from '@/client/components/ui/m
 import { apiPost, ApiError } from '@/client/lib/api';
 import { useDocumentTitle } from '@/client/lib/hooks';
 import { useFeed, useProfile, useSession } from '@/client/lib/queries';
-import { cn, formatDate, formatNumber, pluralPosts } from '@/client/lib/utils';
+import { cn, formatDate, formatNumber, plural, pluralPosts } from '@/client/lib/utils';
 import type { PostType } from '@/shared/post-types';
 
 const ROLE_LABEL = { user: 'участник', moderator: 'модератор', admin: 'администратор' } as const;
@@ -182,24 +182,26 @@ export function ProfilePage() {
 
           <div className="relative mt-5 flex flex-wrap items-stretch divide-x divide-border/70 rounded-xl border border-border/70 bg-surface/50">
             {[
-              { label: 'публикаций', value: counts.posts },
-              { label: 'комментариев', value: counts.comments },
-              { label: 'подписчиков', value: counts.followers },
-              { label: 'подписок', value: counts.following },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="min-w-[25%] flex-1 px-3 py-2.5 text-center"
-                title={stat.value === null ? 'Скрыто настройками приватности' : undefined}
-              >
-                <p className="font-display text-lg font-semibold tabular-nums">
-                  {stat.value === null ? '—' : <AnimatedNumber value={stat.value} />}
-                </p>
-                <p className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground">
-                  {stat.value === null ? 'скрыто' : stat.label}
-                </p>
-              </div>
-            ))}
+              { value: counts.posts, forms: ['публикация', 'публикации', 'публикаций'] },
+              { value: counts.comments, forms: ['комментарий', 'комментария', 'комментариев'] },
+              { value: counts.followers, forms: ['подписчик', 'подписчика', 'подписчиков'] },
+              { value: counts.following, forms: ['подписка', 'подписки', 'подписок'] },
+            ].map((stat) => {
+              const label =
+                stat.value === null ? 'скрыто' : plural(stat.value, stat.forms[0], stat.forms[1], stat.forms[2]);
+              return (
+                <div
+                  key={stat.forms[2]}
+                  className="min-w-[25%] flex-1 px-3 py-2.5 text-center"
+                  title={stat.value === null ? 'Скрыто настройками приватности' : undefined}
+                >
+                  <p className="font-display text-lg font-semibold tabular-nums">
+                    {stat.value === null ? '—' : <AnimatedNumber value={stat.value} />}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground">{label}</p>
+                </div>
+              );
+            })}
           </div>
         </section>
 

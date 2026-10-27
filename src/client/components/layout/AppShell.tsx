@@ -27,6 +27,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Avatar, CountBadge } from '@/client/components/ui/primitives';
 import { apiPost } from '@/client/lib/api';
 import { useDebounced, useLockBody } from '@/client/lib/hooks';
+import { POST_TYPE_META } from '@/shared/post-types';
 import { keys, useFeed, useSession, useTagSuggestions, useUnreadCount, useUserSearch } from '@/client/lib/queries';
 import { useTheme } from '@/client/lib/theme';
 import { cn } from '@/client/lib/utils';
@@ -420,7 +421,7 @@ function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (op
                         >
                           <span className="line-clamp-1 text-[13px] font-medium">{post.title}</span>
                           <span className="line-clamp-1 text-[11px] text-muted-foreground">
-                            {post.author.displayName} · {post.type}
+                            {post.author.displayName} · {POST_TYPE_META[post.type].name}
                           </span>
                         </button>
                       ))}

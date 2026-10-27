@@ -22,6 +22,7 @@ import { useSession } from '@/client/lib/queries';
 import { cn, formatNumber, timeAgo } from '@/client/lib/utils';
 import type { PostCard } from '@/shared/types';
 import { Avatar, Badge } from '@/client/components/ui/primitives';
+import { POST_TYPE_ICON } from '@/client/components/post/type-icons';
 
 export function TypeBadge({ type }: { type: PostCard['type'] }) {
   const meta = POST_TYPE_META[type];
@@ -86,15 +87,27 @@ export function PostCardItem({
   };
 
   const meta = POST_TYPE_META[post.type];
+  const TypeIcon = POST_TYPE_ICON[post.type];
 
   return (
     <article
       className={cn(
-        'nuffy-card group overflow-hidden rounded-xl',
+        'nuffy-card group relative isolate overflow-hidden rounded-xl',
         variant === 'grid' && 'flex h-full min-h-[292px] flex-col p-4',
         variant === 'list' && 'flex flex-col p-4 sm:p-5',
       )}
     >
+      {/* Декоративный знак формата: заполняет воздух в высоких карточках,
+          не изображая данных, которых нет в превью. */}
+      {variant === 'grid' ? (
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <span className="absolute -right-12 -top-14 h-32 w-32 rounded-full bg-accent/12 blur-2xl" />
+          <TypeIcon
+            className="absolute -bottom-5 -right-4 h-28 w-28 text-foreground/[0.045] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 group-hover:scale-[1.04]"
+            strokeWidth={1.2}
+          />
+        </div>
+      ) : null}
       <div className="flex items-center gap-2">
         <Link
           to={`/u/${post.author.username}`}

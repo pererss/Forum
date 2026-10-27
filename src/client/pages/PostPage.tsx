@@ -38,7 +38,7 @@ import { PageTransition } from '@/client/components/ui/motion';
 import { apiDelete, apiPost, ApiError } from '@/client/lib/api';
 import { useDocumentTitle } from '@/client/lib/hooks';
 import { usePost, useProfile, useSession } from '@/client/lib/queries';
-import { cn, formatDate, formatNumber, timeAgo } from '@/client/lib/utils';
+import { cn, formatDate, formatNumber, pluralComments, timeAgo } from '@/client/lib/utils';
 
 const REPORT_REASONS = [
   { value: 'spam', label: 'Спам или реклама' },
@@ -462,7 +462,7 @@ export function PostPage() {
               to="#comments"
               className="inline-flex h-8 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium text-muted-foreground hover:bg-surface-hover hover:text-foreground"
             >
-              {detail.counts.comments} комментариев
+              {pluralComments(detail.counts.comments)}
             </Link>
 
             <button

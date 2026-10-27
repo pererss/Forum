@@ -184,6 +184,7 @@ export function ExplorePage() {
               type="button"
               onClick={() => setFiltersOpen((open) => !open)}
               aria-expanded={filtersOpen}
+              aria-label={filtersOpen ? 'Скрыть фильтры' : 'Показать фильтры'}
               className={cn(
                 'flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-2.5 text-[12.5px] font-medium transition-colors',
                 filtersOpen || activeFilters.length > 0

@@ -11,7 +11,6 @@ import {
   RotateCcw,
   Search,
   SlidersHorizontal,
-  Sparkles,
   X,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -192,13 +191,6 @@ export function FeedPage({ view = 'feed' }: { view?: FeedView }) {
               <p className="mt-1.5 text-[12px] text-muted-foreground">{headerSubtitle}</p>
             ) : null}
           </div>
-          {user ? (
-            <Button asChild size="sm" variant="secondary" className="hidden sm:inline-flex">
-              <Link to="/new">
-                <Sparkles className="h-3.5 w-3.5" /> Создать
-              </Link>
-            </Button>
-          ) : null}
         </header>
 
         {!user && view === 'feed' ? (
@@ -293,7 +285,14 @@ export function FeedPage({ view = 'feed' }: { view?: FeedView }) {
             ) : null}
           </Button>
           {user && view === 'feed' ? (
-            <Button type="button" variant="outline" size="md" onClick={() => setSaveOpen((open) => !open)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              onClick={() => setSaveOpen((open) => !open)}
+              aria-label="Сохранить фильтр"
+              aria-expanded={saveOpen}
+            >
               <Bookmark className="h-4 w-4" />
               <span className="hidden sm:inline">Сохранить</span>
             </Button>
