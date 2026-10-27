@@ -22,7 +22,7 @@ import {
   X,
   ArrowRight,
 } from 'lucide-react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { Avatar, CountBadge } from '@/client/components/ui/primitives';
 import { apiPost } from '@/client/lib/api';
@@ -36,6 +36,18 @@ const mainNav = [
   { to: '/feed', label: 'Лента', icon: Home, end: true },
   { to: '/explore', label: 'Обзор', icon: Compass, end: false },
 ];
+
+/** Заглушка на время подгрузки чанка страницы: тот же ритм, что у скелетонов. */
+function RouteFallback() {
+  return (
+    <div className="mx-auto w-full max-w-3xl space-y-3 pt-2" aria-busy="true" aria-live="polite">
+      <div className="h-3 w-20 animate-pulse-soft rounded bg-muted" />
+      <div className="h-7 w-52 animate-pulse-soft rounded bg-muted" />
+      <div className="mt-4 h-28 animate-pulse-soft rounded-xl border border-border bg-card" />
+      <div className="h-40 animate-pulse-soft rounded-xl border border-border bg-card" />
+    </div>
+  );
+}
 
 export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
   return (
@@ -717,7 +729,9 @@ export function AppShell() {
         </aside>
 
         <main id="content" className="min-w-0 flex-1 px-3 pb-24 pt-5 sm:px-5 md:px-6 lg:pb-12">
-          <Outlet />
+          <Suspense fallback={<RouteFallback />}>
+            <Outlet />
+          </Suspense>
         </main>
 
         {showRail ? (

@@ -1,19 +1,43 @@
-// Маршруты приложения.
+// Маршруты приложения. Тяжёлые страницы подгружаются отдельными чанками.
 
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router';
 import { AppShell } from '@/client/components/layout/AppShell';
-import { AdminPage } from '@/client/pages/AdminPage';
-import { AuthPage, OnboardingPage } from '@/client/pages/AuthPages';
-import { EditorPage } from '@/client/pages/EditorPage';
-import { ExplorePage } from '@/client/pages/ExplorePage';
-import { FeedPage } from '@/client/pages/FeedPage';
 import { LandingPage } from '@/client/pages/LandingPage';
-import { NotFoundPage } from '@/client/pages/NotFoundPage';
-import { NotificationsPage } from '@/client/pages/NotificationsPage';
-import { PostPage } from '@/client/pages/PostPage';
-import { ProfilePage } from '@/client/pages/ProfilePage';
-import { SettingsPage } from '@/client/pages/SettingsPage';
+
+const AdminPage = lazy(() =>
+  import('@/client/pages/AdminPage').then((module) => ({ default: module.AdminPage })),
+);
+const AuthPage = lazy(() =>
+  import('@/client/pages/AuthPages').then((module) => ({ default: module.AuthPage })),
+);
+const OnboardingPage = lazy(() =>
+  import('@/client/pages/AuthPages').then((module) => ({ default: module.OnboardingPage })),
+);
+const EditorPage = lazy(() =>
+  import('@/client/pages/EditorPage').then((module) => ({ default: module.EditorPage })),
+);
+const ExplorePage = lazy(() =>
+  import('@/client/pages/ExplorePage').then((module) => ({ default: module.ExplorePage })),
+);
+const FeedPage = lazy(() =>
+  import('@/client/pages/FeedPage').then((module) => ({ default: module.FeedPage })),
+);
+const NotFoundPage = lazy(() =>
+  import('@/client/pages/NotFoundPage').then((module) => ({ default: module.NotFoundPage })),
+);
+const NotificationsPage = lazy(() =>
+  import('@/client/pages/NotificationsPage').then((module) => ({ default: module.NotificationsPage })),
+);
+const PostPage = lazy(() =>
+  import('@/client/pages/PostPage').then((module) => ({ default: module.PostPage })),
+);
+const ProfilePage = lazy(() =>
+  import('@/client/pages/ProfilePage').then((module) => ({ default: module.ProfilePage })),
+);
+const SettingsPage = lazy(() =>
+  import('@/client/pages/SettingsPage').then((module) => ({ default: module.SettingsPage })),
+);
 
 /** Прокрутка вверх при смене страницы, но не при смене фильтров в той же ленте. */
 function ScrollToTop() {
